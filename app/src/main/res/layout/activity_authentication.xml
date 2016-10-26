@@ -8,5 +8,58 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.faisalkhan.firebasesample.Authentication">
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_centerHorizontal="true"/>
 
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/status"
+        android:text="detail"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:id="@+id/field_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:minEms="10"
+        android:layout_centerInParent="true"/>
+    <EditText
+        android:id="@+id/field_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/field_email"
+        android:hint="Password"
+        android:inputType="textWebPassword"
+        android:minEms="10"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_centerInParent="true"/>
+    <Button
+        android:id="@+id/email_create_account_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:layout_toStartOf="@+id/email_sign_in_button"
+        android:layout_below="@+id/field_password"/>
+    <Button
+        android:id="@+id/email_sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/field_password"/>
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:layout_toEndOf="@+id/email_sign_in_button"
+        android:layout_below="@+id/field_password"/>
 </RelativeLayout>

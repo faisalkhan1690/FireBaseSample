@@ -10,6 +10,12 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+    }
+    dexOptions {
+        incremental = true;
+        preDexLibraries = false
+        javaMaxHeapSize "4g" // 2g should be also OK
     }
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -35,6 +41,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:9.2.1'
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.google.firebase:firebase-core:9.2.1'
+    compile 'com.android.support:multidex:1.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

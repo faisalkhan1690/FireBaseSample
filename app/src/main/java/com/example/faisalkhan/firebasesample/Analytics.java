@@ -28,7 +28,11 @@ public class Analytics extends AppCompatActivity {
 
     public void sendCustomEvent(View view){
         Bundle bundle = new Bundle();
-        bundle.putString("custom param", "custom value");
-        mFirebaseAnalytics.logEvent("Custom event", bundle);
+        bundle.putString("custom_param", "custom value");
+        mFirebaseAnalytics.logEvent("custom_event", bundle);
+
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("name", "faisal");
+        mFirebaseAnalytics.logEvent("faisal", bundle);
     }
 }
