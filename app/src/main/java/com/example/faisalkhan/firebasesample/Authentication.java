@@ -1,9 +1,11 @@
 package com.example.faisalkhan.firebasesample;
 
 import android.app.ProgressDialog;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,11 +29,14 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     private ProgressDialog mProgressDialog;
+    private final String TAG=Authentication.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+
+        getActionBar().setTitle("Authentication");
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Please Wait...");
@@ -52,9 +57,10 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
             public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Toast.makeText(Authentication.this, "onAuthStateChanged:signed_in:" + user.getUid(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"User is Already sign in");
+                    Toast.makeText(Authentication.this, "User is Already sign in.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Authentication.this, "onAuthStateChanged:signed_out", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"User is not sign in");
                 }
                 updateUI(user);
             }
@@ -76,21 +82,24 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     }
 
     private void createAccount(String email, String password) {
-        Toast.makeText(Authentication.this, "createAccount:" + email, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Authentication.this, "creating account with :" + email, Toast.LENGTH_SHORT).show();
         if (!validateForm()) {
             return;
         }
 
         showProgressDialog();
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
-                        Toast.makeText(Authentication.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(Authentication.this, "Auth failed", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Create Account process complete with false ");
+                        if (task.isSuccessful()) {
+                            Log.d(TAG,"Sign Up Successfully");
+                            Toast.makeText(Authentication.this, "Sign Up Successfully", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Log.d(TAG,"Sign Up Failed");
+                            Toast.makeText(Authentication.this, "Sign Up Failed.", Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
                     }
@@ -103,7 +112,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     }
 
     private void signIn(String email, String password) {
-        Toast.makeText(Authentication.this, "signIn:" + email, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Authentication.this, "Signing in with account :" + email, Toast.LENGTH_SHORT).show();
         if (!validateForm()) {
             return;
         }
@@ -113,11 +122,13 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
-                        Toast.makeText(Authentication.this, "signInWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(Authentication.this, "signInWithEmail:failed" + task.getException(), Toast.LENGTH_SHORT).show();
-                        }
-                        if (!task.isSuccessful()) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG,"Sign in Successfully");
+                            Toast.makeText(Authentication.this, "Sign Up Successfully", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Log.d(TAG,"Sign in Failed");
+                            Toast.makeText(Authentication.this, "Sign Up Failed.", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG,"Sign in Failed with error :"+task.getException());
                             mStatusTextView.setText("Auth failed");
                         }
                         hideProgressDialog();

@@ -15,7 +15,8 @@ public class Analytics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        // Obtain the FirebaseAnalytics instance.
+        getActionBar().setTitle("Authentication");
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     }
