@@ -11,7 +11,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  *
  * For triggering event to firebase first you need to configure firebase in your project.
  * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
- * Or you can flow my doc as well link :-
+ * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
  *
  * In firebase you can trigger two kinds of events Custom and predefine.
  * There are more then 500 predefine events in firebase that you can use to track events

@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MainActivity class is a activity class for Show list of Firebase featre
+ * MainActivity class is a activity class for displaying list of Firebase features.
+ *
+ * For more details go on activity class
+ *
+ * @author Faisal Khan
  */
 public class MainActivity extends AppCompatActivity {
 
