@@ -11,6 +11,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MainActivity class is a activity class for Show list of Firebase featre
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
