@@ -6,6 +6,27 @@ import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+/**
+ * Activity class for Event Analytics.
+ *
+ * For triggering event to firebase first you need to configure firebase in your project.
+ * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
+ * Or you can flow my doc as well link :-
+ *
+ * In firebase you can trigger two kinds of events Custom and predefine.
+ * There are more then 500 predefine events in firebase that you can use to track events
+ * And Custom are those those are defines by user.
+ *
+ * For understanding how we can send custom and predefine events please have a look on
+ * sendPredefinedEvent and sendCustomEvent  methods.
+ *
+ * For more details for Events follow this link :- https://firebase.google.com/docs/analytics/android/start/
+ *
+ * Note :- Value of event will only visible n console when more then 10 user trigger that event. else it will remain empty.
+ * And events will be update after 4 to 5 hours.
+ *
+ * @author Faisal Khan
+ */
 public class Analytics extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -15,19 +36,29 @@ public class Analytics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+        //setting action bar
         getActionBar().setTitle("Authentication");
 
+        //getting firebase analytics instance to triggering events
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     }
 
-    public void sendPredefinedEvent(View view){
+    /**
+     * Method to send predefine method
+     * @param view root view
+     */
+    public void sendPredefinedEvent(View view) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.LEVEL, "level 2");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_UP, bundle);
     }
 
-    public void sendCustomEvent(View view){
+    /**
+     * Method to send Custom event method
+     * @param view root view
+     */
+    public void sendCustomEvent(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("custom_param", "custom value");
         mFirebaseAnalytics.logEvent("custom_event", bundle);
