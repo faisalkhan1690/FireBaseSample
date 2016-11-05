@@ -1,16 +1,20 @@
 package com.example.faisalkhan.firebasesample;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.multidex.MultiDex;
 
 /**
- * Created by faisal.khan on 10/12/2016.
+ * Application class for Application
+ *
+ * @author Faisal Khan
  */
-
 public class ApplicationClass extends Application {
     @Override
-    public void onCreate() {
-        super.onCreate();
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //installing multidex
         MultiDex.install(this);
     }
+
 }

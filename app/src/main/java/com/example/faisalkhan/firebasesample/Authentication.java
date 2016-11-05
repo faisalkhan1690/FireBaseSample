@@ -1,9 +1,8 @@
 package com.example.faisalkhan.firebasesample;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +16,27 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity class for Demonstration of Email base user Auth from firebase.
+ *
+ * Firebase provide  Google+ ,Facebook ,Twitter etc based authentication. and with this it provides email based Authentication.
+ *
+ * For doing any operation you first need to FirebaseAuth instance and AuthStateListener instance. and after that set AuthStateListener
+ * listener to firebase instance.
+ *
+ * Now you can do Sign Up , login and Logout.
+ *
+ * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
+ * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
+ *
+ * Email based Authentication
+ * Or you can also follow my link :- https://firebase.google.com/docs/auth/
+ *
+ * Or :- https://firebase.google.com/docs/auth/android/password-auth
+ *
+ *
+ * @author Faisal Khan
+ */
 public class Authentication extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -25,8 +45,8 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     private EditText mEmailField;
     private EditText mPasswordField;
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth; //FirebaseAuth object for Authentication
+    private FirebaseAuth.AuthStateListener mAuthListener; //Listener for FirebaseAuth object
 
     private ProgressDialog mProgressDialog;
     private final String TAG=Authentication.class.getSimpleName();
@@ -36,6 +56,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
+        //setting action bar
         getActionBar().setTitle("Authentication");
 
         mProgressDialog = new ProgressDialog(this);
@@ -50,6 +71,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
+
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -70,6 +92,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
+        //setting auth listener for Authentication object
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -77,10 +100,16 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
+            //removing auth listener for Authentication object
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 
+    /**
+     * Method to create account on Firebase
+     * @param email or user id of user
+     * @param password password
+     */
     private void createAccount(String email, String password) {
         Toast.makeText(Authentication.this, "creating account with :" + email, Toast.LENGTH_SHORT).show();
         if (!validateForm()) {
@@ -106,11 +135,19 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
+    /**
+     * Method to show progress dialog
+     */
     private void showProgressDialog() {
         if (mProgressDialog != null && !mProgressDialog.isShowing())
             mProgressDialog.show();
     }
 
+    /**
+     * Method to sign in with user id and pasword
+     * @param email  email of user
+     * @param password passworrd of user
+     */
     private void signIn(String email, String password) {
         Toast.makeText(Authentication.this, "Signing in with account :" + email, Toast.LENGTH_SHORT).show();
         if (!validateForm()) {
@@ -136,16 +173,26 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
+    /**
+     * Method to hide progress dialog
+     */
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing())
             mProgressDialog.dismiss();
     }
 
+    /**
+     * Method to sign out
+     */
     private void signOut() {
         mAuth.signOut();
         updateUI(null);
     }
 
+    /**
+     * Method to check all validation is success
+     * @return true is validation true else false
+     */
     private boolean validateForm() {
         boolean valid = true;
 
@@ -168,6 +215,10 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
         return valid;
     }
 
+    /**
+     * Method to change UI components after an operation
+     * @param user user object
+     */
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
