@@ -3,6 +3,7 @@ package com.example.faisalkhan.firebasesample;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -56,8 +57,8 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        //setting action bar
-        getActionBar().setTitle("Authentication");
+        Toolbar toolbar=(Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setTitle("Authentication");
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Please Wait...");
@@ -65,8 +66,8 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
 
         mStatusTextView = (TextView) findViewById(R.id.status);
         mDetailTextView = (TextView) findViewById(R.id.detail);
-        mEmailField = (EditText) findViewById(R.id.field_email);
-        mPasswordField = (EditText) findViewById(R.id.field_password);
+        mEmailField = (EditText) findViewById(R.id.et_email);
+        mPasswordField = (EditText) findViewById(R.id.et_password);
 
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
@@ -80,7 +81,6 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG,"User is Already sign in");
-                    Toast.makeText(Authentication.this, "User is Already sign in.", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d(TAG,"User is not sign in");
                 }
@@ -144,6 +144,14 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
+     * Method to hide progress dialog
+     */
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+    }
+
+    /**
      * Method to sign in with user id and pasword
      * @param email  email of user
      * @param password passworrd of user
@@ -173,13 +181,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
-    /**
-     * Method to hide progress dialog
-     */
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing())
-            mProgressDialog.dismiss();
-    }
+
 
     /**
      * Method to sign out

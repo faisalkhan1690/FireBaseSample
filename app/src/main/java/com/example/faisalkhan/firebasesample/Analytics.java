@@ -2,6 +2,7 @@ package com.example.faisalkhan.firebasesample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -37,7 +38,8 @@ public class Analytics extends AppCompatActivity {
         setContentView(R.layout.activity_second);
 
         //setting action bar
-        getActionBar().setTitle("Authentication");
+        Toolbar toolbar=(Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setTitle("Analytics");
 
         //getting firebase analytics instance to triggering events
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

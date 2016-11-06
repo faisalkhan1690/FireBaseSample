@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> listData=new ArrayList<>();
         listData.add("Analytics");
         listData.add("Authentication");
+        listData.add("DataBase");
         ListView lvFireBase=(ListView)findViewById(R.id.lv_fire_base);
         lvFireBase.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData));
 
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         startActivity(new Intent(MainActivity.this,Authentication.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(MainActivity.this,DataBase.class));
                         break;
                 }
             }

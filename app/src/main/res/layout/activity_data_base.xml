@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_data_base"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.faisalkhan.firebasesample.DataBase">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <TextView
+        android:id="@+id/tv_authentication"
+        android:textStyle="bold"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/tv_id_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_id"
+            android:layout_alignTop="@+id/et_id"
+            android:ems="6"
+            android:gravity="center|left"
+            android:text="ID :-"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_id_text"
+            android:hint="ID"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_name"
+            android:layout_alignTop="@+id/et_name"
+            android:layout_below="@+id/tv_id_text"
+            android:ems="6"
+            android:gravity="center|left"
+            android:text="Name :-"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_id_text"
+            android:layout_toRightOf="@+id/tv_name_text"
+            android:hint="Name"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_city_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_city"
+            android:layout_alignTop="@+id/et_city"
+            android:layout_below="@+id/et_name"
+            android:ems="6"
+            android:gravity="center|left"
+            android:text="City :-"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_name"
+            android:layout_toRightOf="@+id/tv_city_text"
+            android:hint="City"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_country_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_country"
+            android:layout_alignTop="@+id/et_country"
+            android:layout_below="@+id/et_city"
+            android:ems="6"
+            android:gravity="center|left"
+            android:text="Country :-"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_city"
+            android:layout_toRightOf="@+id/tv_country_text"
+            android:hint="Country"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/btn_insert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_country"
+            android:text="Insert" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_country"
+            android:layout_toRightOf="@+id/btn_insert"
+            android:text="Delete" />
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_country"
+            android:layout_toRightOf="@+id/btn_delete"
+            android:text="Update" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_insert"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_insert"
+            android:layout_toRightOf="@+id/btn_cancel"
+            android:text="Edit" />
+
+        <ListView
+            android:id="@+id/lv_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/btn_cancel" />
+    </RelativeLayout>
+</LinearLayout>

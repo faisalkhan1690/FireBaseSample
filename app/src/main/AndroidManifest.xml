@@ -6,11 +6,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".ApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".ApplicationClass"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -19,8 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Analytics" />
-        <activity android:name=".Authentication"></activity>
+
+        <activity
+            android:name=".Analytics"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".Authentication"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".DataBase"
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
 
 </manifest>
