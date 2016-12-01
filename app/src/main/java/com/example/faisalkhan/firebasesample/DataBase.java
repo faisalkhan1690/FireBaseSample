@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -77,10 +79,11 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     private TextView mTvCity;
     private TextView mTvCountry;
     private View mLlButton;
-    private Operations mOperations=Operations.CANCEL;
+    private Operations mOperations = Operations.CANCEL;
+    private ArrayList<UserData> mListData;
 
-    private enum Operations{
-        INSERT,DELETE,EDIT,CANCEL
+    private enum Operations {
+        INSERT, DELETE, EDIT, CANCEL
     }
 
     @Override
@@ -144,7 +147,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     private void initUi() {
         mTvAuthStatus = (TextView) findViewById(R.id.tv_authentication);
         mLvData = (ListView) findViewById(R.id.lv_data);
-        mLlButton =findViewById(R.id.ll_buttons);
+        mLlButton = findViewById(R.id.ll_buttons);
 
         mEtId = (EditText) findViewById(R.id.et_id);
         mEtName = (EditText) findViewById(R.id.et_name);
@@ -172,6 +175,18 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Please Wait...");
         mProgressDialog.setCancelable(false);
+
+        mLvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserData userData = mListData.get(position);
+                mEtId.setText(userData.id);
+                mEtName.setText(userData.name);
+                mEtCity.setText(userData.city);
+                mEtCountry.setText(userData.country);
+
+            }
+        });
     }
 
     @Override
@@ -179,7 +194,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
 
         switch (view.getId()) {
             case R.id.btn_insert:
-                mOperations=Operations.INSERT;
+                mOperations = Operations.INSERT;
 
                 mTvId.setVisibility(View.VISIBLE);
                 mEtId.setVisibility(View.VISIBLE);
@@ -191,12 +206,18 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtCountry.setVisibility(View.VISIBLE);
                 mLlButton.setVisibility(View.GONE);
 
+                mEtId.setText("");
+                mEtName.setText("");
+                mEtCity.setText("");
+                mEtCountry.setText("");
+
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
+                mBtnSave.setText("Insert");
                 break;
 
             case R.id.btn_delete:
-                mOperations=Operations.DELETE;
+                mOperations = Operations.DELETE;
 
                 mTvId.setVisibility(View.VISIBLE);
                 mEtId.setVisibility(View.VISIBLE);
@@ -208,12 +229,18 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtCountry.setVisibility(View.GONE);
                 mLlButton.setVisibility(View.GONE);
 
+                mEtId.setText("");
+                mEtName.setText("");
+                mEtCity.setText("");
+                mEtCountry.setText("");
+
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
+                mBtnSave.setText("Delete");
                 break;
 
             case R.id.btn_edit:
-                mOperations=Operations.EDIT;
+                mOperations = Operations.EDIT;
 
                 mTvId.setVisibility(View.VISIBLE);
                 mEtId.setVisibility(View.VISIBLE);
@@ -225,12 +252,18 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtCountry.setVisibility(View.VISIBLE);
                 mLlButton.setVisibility(View.GONE);
 
+                mEtId.setText("");
+                mEtName.setText("");
+                mEtCity.setText("");
+                mEtCountry.setText("");
+
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
+                mBtnSave.setText("Update");
                 break;
 
             case R.id.btn_cancel:
-                mOperations=Operations.CANCEL;
+                mOperations = Operations.CANCEL;
                 setInitial();
                 break;
 
@@ -248,17 +281,17 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
      * Method to perform operation insert, delete , update.
      */
     private void saveClicked() {
-        switch(mOperations){
+        switch (mOperations) {
             case INSERT:
                 setDataInToDataBase();
                 break;
 
             case EDIT:
-                //TODO
+                setDataInToDataBase();
                 break;
 
             case DELETE:
-                //TODO
+                deleteDataFromDataBase();
                 break;
 
             default:
@@ -288,7 +321,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         mBtnSave.setVisibility(View.GONE);
         mBtnCancel.setVisibility(View.GONE);
         mLlButton.setVisibility(View.VISIBLE);
-        mOperations=Operations.CANCEL;
+        mOperations = Operations.CANCEL;
     }
 
     /**
@@ -356,6 +389,35 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     }
 
     /**
+     * Method to delete data from Database
+     */
+    public void deleteDataFromDataBase() {
+        showProgressDialog();
+        String id = mEtId.getText().toString().trim();
+
+        if (id.equals("")) {
+            Toast.makeText(DataBase.this, "Please enter a id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mRefDataBase.child(id).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Toast.makeText(DataBase.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    hideProgressDialog();
+                } else {
+                    mEtId.setText("");
+                    mEtName.setText("");
+                    mEtCity.setText("");
+                    mEtCountry.setText("");
+                    Toast.makeText(DataBase.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
+                    getDatFromDataBase();
+                }
+            }
+        });
+    }
+
+    /**
      * Method to set value in Data Base
      */
     public void getDatFromDataBase() {
@@ -370,11 +432,13 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 if (serverData == null) {
                     return;
                 }
-                List<UserData> listData = new ArrayList<>();
+                mListData = new ArrayList<>();
                 for (int i = 1; i < serverData.size(); i++) {
-                    listData.add(new UserData(serverData.get(i).get(KEY_ID), serverData.get(i).get(KEY_NAME), serverData.get(i).get(KEY_CITY), serverData.get(i).get(KEY_COUNTRY)));
+                    if (serverData.get(i) != null)
+                        mListData.add(new UserData(serverData.get(i).get(KEY_ID), serverData.get(i).get(KEY_NAME), serverData.get(i).get(KEY_CITY), serverData.get(i).get(KEY_COUNTRY)));
                 }
-                mLvData.setAdapter(new ListAdapter(DataBase.this, R.layout.list_view_item,listData));
+                Collections.reverse(mListData);
+                mLvData.setAdapter(new ListAdapter(DataBase.this, R.layout.list_view_item, mListData));
 
             }
 
