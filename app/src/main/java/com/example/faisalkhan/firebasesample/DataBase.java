@@ -38,9 +38,6 @@ import java.util.Map;
 
 /**
  * Activity class for Demonstration of Database based on firebase.
- * <p>
- * <p>
- * <p>
  * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
  * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
  * For more info you can follow this link :- https://firebase.google.com/docs/database/
@@ -305,7 +302,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     }
 
     /**
-     * set view in his initial state
+     * set Activity view in his initial state
      */
     private void setInitial() {
 
@@ -347,7 +344,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
 
 
     /**
-     * Method to set value in Data Base
+     * Method to set value in firebase Data Base
      */
     public void setDataInToDataBase() {
 
@@ -391,7 +388,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     }
 
     /**
-     * Method to delete data from Database
+     * Method to delete data from firebase Data Base
      */
     public void deleteDataFromDataBase() {
         showProgressDialog();
@@ -421,7 +418,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     }
 
     /**
-     * Method to set value in Data Base
+     * Method to get value from firebase Data Base
      */
     public void getDatFromDataBase() {
         mRefDataBase.addValueEventListener(new ValueEventListener() {
@@ -452,6 +449,9 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         });
     }
 
+    /**
+     * Model class for list that shows data
+     */
     public class UserData {
         public String id;
         public String name;
@@ -466,6 +466,9 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * Adapter class for list that shows data
+     */
     public class ListAdapter extends ArrayAdapter<UserData> {
         public ListAdapter(Context context, int resource, List<UserData> objects) {
             super(context, resource, objects);
@@ -475,7 +478,6 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             UserData user = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_view_item, parent, false);
             }
@@ -488,9 +490,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
             tvName.setText(user != null ? user.name : "");
             tvCity.setText(user != null ? user.city : "");
             tvCountry.setText(user != null ? user.country : "");
-
             return convertView;
         }
     }
-
 }
