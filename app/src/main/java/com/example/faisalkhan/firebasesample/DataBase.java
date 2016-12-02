@@ -210,6 +210,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtName.setText("");
                 mEtCity.setText("");
                 mEtCountry.setText("");
+                mEtId.setEnabled(true);
 
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
@@ -233,6 +234,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtName.setText("");
                 mEtCity.setText("");
                 mEtCountry.setText("");
+                mEtId.setEnabled(true);
 
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
@@ -256,6 +258,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtName.setText("");
                 mEtCity.setText("");
                 mEtCountry.setText("");
+                mEtId.setEnabled(false);
 
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
@@ -264,6 +267,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
 
             case R.id.btn_cancel:
                 mOperations = Operations.CANCEL;
+                mEtId.setEnabled(false);
                 setInitial();
                 break;
 
@@ -317,6 +321,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         mTvCountry.setVisibility(View.GONE);
         mEtCountry.setVisibility(View.GONE);
         mEtCountry.setText("");
+        mEtId.setEnabled(true);
 
         mBtnSave.setVisibility(View.GONE);
         mBtnCancel.setVisibility(View.GONE);
@@ -378,10 +383,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 if (databaseError != null)
                     Toast.makeText(DataBase.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 else {
-                    mEtId.setText("");
-                    mEtName.setText("");
-                    mEtCity.setText("");
-                    mEtCountry.setText("");
+                    setInitial();
                     Toast.makeText(DataBase.this, "Insert successfully", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -411,6 +413,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                     mEtCity.setText("");
                     mEtCountry.setText("");
                     Toast.makeText(DataBase.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
+                    hideProgressDialog();
                     getDatFromDataBase();
                 }
             }
@@ -433,9 +436,9 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                     return;
                 }
                 mListData = new ArrayList<>();
-                for (int i = 1; i < serverData.size(); i++) {
-                    if (serverData.get(i) != null)
-                        mListData.add(new UserData(serverData.get(i).get(KEY_ID), serverData.get(i).get(KEY_NAME), serverData.get(i).get(KEY_CITY), serverData.get(i).get(KEY_COUNTRY)));
+                for (Map<String, String>  map:serverData) {
+                    if (map != null)
+                        mListData.add(new UserData(map.get(KEY_ID), map.get(KEY_NAME), map.get(KEY_CITY), map.get(KEY_COUNTRY)));
                 }
                 Collections.reverse(mListData);
                 mLvData.setAdapter(new ListAdapter(DataBase.this, R.layout.list_view_item, mListData));
