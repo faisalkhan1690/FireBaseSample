@@ -4,9 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,20 +28,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Activity class for Demonstration of Database based on firebase.
+ * <p>
+ * For performing any operation user should be authenticated from Firebase server.
+ * Only then he can perform operations on Firebase Database.
+ * For more details about the please Refer Authentication class in this project.
+ * <p>
+ * In this activity i am performing operations like Insertion, Deletion, update data and fetching data from firebase server.
+ * For every operation there are separate methods in the code.
+ * <p>
+ * For performing any operation you have access to table in which you data is.
+ * <p>
+ * mRefDataBase = FirebaseDatabase.getInstance().getReference(TABLE_NAME);
+ * Any by using this line you can access that table and can operation operations.
+ * <p>
  * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
  * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
+ * <p>
  * For more info you can follow this link :- https://firebase.google.com/docs/database/
- * Or link :-
+ * Or link :- http://firebasesample.blogspot.in/
  * Or link :- https://firebase.google.com/docs/database/android/start/
  *
  * @author Faisal Khan
@@ -77,7 +88,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     private TextView mTvCountry;
     private View mLlButton;
     private Operations mOperations = Operations.CANCEL;
-    private ArrayList<UserData> mListData;
+    private ArrayList<UserData> mListData = new ArrayList<>();
 
     private enum Operations {
         INSERT, DELETE, EDIT, CANCEL
@@ -176,11 +187,13 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
         mLvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UserData userData = mListData.get(position);
-                mEtId.setText(userData.id);
-                mEtName.setText(userData.name);
-                mEtCity.setText(userData.city);
-                mEtCountry.setText(userData.country);
+                if (mOperations == Operations.EDIT || mOperations == Operations.DELETE) {
+                    UserData userData = mListData.get(position);
+                    mEtId.setText(userData.id);
+                    mEtName.setText(userData.name);
+                    mEtCity.setText(userData.city);
+                    mEtCountry.setText(userData.country);
+                }
 
             }
         });
@@ -207,7 +220,11 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
                 mEtName.setText("");
                 mEtCity.setText("");
                 mEtCountry.setText("");
-                mEtId.setEnabled(true);
+                mEtId.setEnabled(false);
+                if (mListData.size() == 0)
+                    mEtId.setText("0");
+                else
+                    mEtId.setText(String.valueOf(Integer.parseInt(mListData.get(0).id) + 1));
 
                 mBtnCancel.setVisibility(View.VISIBLE);
                 mBtnSave.setVisibility(View.VISIBLE);
@@ -421,19 +438,21 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
      * Method to get value from firebase Data Base
      */
     public void getDatFromDataBase() {
+        showProgressDialog();
         mRefDataBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot == null) {
                     return;
                 }
+                hideProgressDialog();
                 ArrayList<Map<String, String>> serverData = (ArrayList<Map<String, String>>) dataSnapshot.getValue();
 
                 if (serverData == null) {
                     return;
                 }
                 mListData = new ArrayList<>();
-                for (Map<String, String>  map:serverData) {
+                for (Map<String, String> map : serverData) {
                     if (map != null)
                         mListData.add(new UserData(map.get(KEY_ID), map.get(KEY_NAME), map.get(KEY_CITY), map.get(KEY_COUNTRY)));
                 }
