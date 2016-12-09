@@ -1,6 +1,6 @@
 # FireBaseSample
 --------------
-> A sample how to use popular features of FireBase in android.
+> A sample  for how to use popular features of FireBase in android.
 Using this you can know how to do these flowing things.
 
 
