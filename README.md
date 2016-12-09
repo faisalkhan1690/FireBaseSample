@@ -36,7 +36,7 @@ Pre-requisites
 - Android SDK v14
 - Android Build Tools v23.0.2
 - Android Support repository(Available In Extra in SDK Manager)
-- Firebase Libray 
+- Firebase Library 
 
 
 Screenshots
