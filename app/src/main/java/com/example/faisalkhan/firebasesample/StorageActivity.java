@@ -368,6 +368,8 @@ public class StorageActivity extends AppCompatActivity {
     public void fetchImagesFromServer() {
         showProgressDialog();
         mListOfImages.clear();
+        mImagePath=null;
+        mTvImagePath.setText("");
         mRefDataBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
