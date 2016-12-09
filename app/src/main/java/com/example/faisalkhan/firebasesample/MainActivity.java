@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
                     case 3:
                         startActivity(new Intent(MainActivity.this,StorageActivity.class));
                         break;
+                    case 4:
+                        startActivity(new Intent(MainActivity.this,Notifications.class));
+                        break;
                 }
             }
         });

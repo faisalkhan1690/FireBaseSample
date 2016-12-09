@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +37,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,19 +46,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Activity class for Demonstration of Storage based on firebase.
- * <p>
+ * Activity class for Storage based on firebase.
+ *
  * For performing any operation you must create reference to firebase storage.
- * You can upload image on server with any auth but for download you must auth from firebase or you change setting in you firebase.
- * Firebase does not provide any list of image stored i firebase for that you have to store download link in Firebase Db
- * and for storing or fetching any data you must have auth.
- * <p>
+ * You can upload image on server without any authentication but for downloading you must authenticated from firebase
+ * or you change setting in you firebase  console to download image without authentication.
+ *
+ * Firebase does not provide any list of image stored in firebase for that you have to store download link in Firebase Database
+ * and for storing or fetching those link you must be authenticated from firebase
+ * so technically for uploading any data you must be authenticated from firebase.
+ *
  * FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
  * StorageReference storageRef = storage.getReferenceFromUrl(" Your firebase url");
- * <p>
+ *
  * By using these two line you can create reference.
  * And performing every operations i have created separate methods please refer those.
- * <p>
+ *
+ * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
+ * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
+ *
  * For more info you can follow this link :- https://firebase.google.com/docs/storage/android/start
  * and link :- https://firebase.google.com/docs/storage/android/create-reference
  * and link :- https://firebase.google.com/docs/storage/android/upload-files
@@ -72,6 +78,7 @@ import java.util.Map;
 public class StorageActivity extends AppCompatActivity {
 
     private final String TAG = StorageActivity.class.getSimpleName();
+
     private TextView mTvImagePath;
     private String mImagePath = null;
     private List<GridItem> mListOfImages = new ArrayList<>();
@@ -85,7 +92,7 @@ public class StorageActivity extends AppCompatActivity {
 
     private static final int RESULT_LOAD_IMAGE = 1;
     private final String TABLE_NAME = "images";
-    private final String KEY_IMAGE_NAME = "name";
+    private final String DATA_BASE_URL="gs://fir-sample-b203f.appspot.com/";
 
     private ProgressDialog mProgressDialog;
     private TextView mTvAuthStatus;
@@ -131,10 +138,9 @@ public class StorageActivity extends AppCompatActivity {
 
         mRefDataBase = FirebaseDatabase.getInstance().getReference(TABLE_NAME);
 
-
         //creating reference to firebase Storage
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        mStorageReference = firebaseStorage.getReferenceFromUrl("gs://fir-sample-b203f.appspot.com/");
+        mStorageReference = firebaseStorage.getReferenceFromUrl(DATA_BASE_URL);
 
     }
 
@@ -142,6 +148,7 @@ public class StorageActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         //setting auth listener for Authentication object
         mAuth.addAuthStateListener(mAuthListener);
     }
@@ -150,6 +157,7 @@ public class StorageActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
+
             //removing auth listener for Authentication object
             mAuth.removeAuthStateListener(mAuthListener);
         }
@@ -189,6 +197,7 @@ public class StorageActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert);
 
 
+        //to get image from phone storage / SD card
         btnBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +205,7 @@ public class StorageActivity extends AppCompatActivity {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,6 +232,7 @@ public class StorageActivity extends AppCompatActivity {
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             if (selectedImage == null) {
+                Log.e(TAG, "selectedImage is null");
                 Toast.makeText(this, "Something goes wrong please try after some time.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -234,6 +245,7 @@ public class StorageActivity extends AppCompatActivity {
             mImagePath = cursor.getString(columnIndex);
             cursor.close();
             if (mImagePath == null) {
+                Log.e(TAG, "mImagePath is null");
                 Toast.makeText(this, "Something goes wrong please try after some time.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -270,6 +282,7 @@ public class StorageActivity extends AppCompatActivity {
             public void onSuccess(Object o) {
 
                 deleteDataFromDataBase(mImagePath.key);
+                Log.d(TAG, "Image delete successfully");
                 Toast.makeText(StorageActivity.this, "Image delete successfully", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -277,6 +290,7 @@ public class StorageActivity extends AppCompatActivity {
             public void onFailure(Exception exception) {
                 hideProgressDialog();
                 Toast.makeText(StorageActivity.this, "Something goes wrong please try after some time.", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Exception on deleting"+exception.toString());
             }
         });
     }
@@ -327,6 +341,7 @@ public class StorageActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception exception) {
                 hideProgressDialog();
+                Log.e(TAG, "Exception on uploading"+exception.toString());
                 Toast.makeText(StorageActivity.this, "Something goes wrong please try after some time.", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -336,8 +351,10 @@ public class StorageActivity extends AppCompatActivity {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 if (downloadUrl != null) {
                     setDataInToDataBase(imageName, downloadUrl.toString());
+                    Log.d(TAG, "Image uploaded successfully");
                     Toast.makeText(StorageActivity.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                 } else {
+                    Log.e(TAG, "Exception on uploading");
                     Toast.makeText(StorageActivity.this, "Something goes wrong please try after some time.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -349,13 +366,18 @@ public class StorageActivity extends AppCompatActivity {
      * Method to fetch images form server
      */
     public void fetchImagesFromServer() {
+        showProgressDialog();
         mListOfImages.clear();
         mRefDataBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                hideProgressDialog();
                 if (dataSnapshot == null) {
+                    Log.e(TAG, "Failed to read value.");
                     return;
                 }
+
+                Log.d(TAG, "Images fetched successfully");
                 Map<String, String> serverData = (HashMap<String, String>) dataSnapshot.getValue();
 
                 if (serverData == null) {
@@ -402,11 +424,14 @@ public class StorageActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Adapter class for Gird for display images
+     */
     public class ImageGridAdapter extends BaseAdapter {
         private Context mContext;
         private List<GridItem> mListOfImages;
 
-        public ImageGridAdapter(Context context, List<GridItem> listOfImages) {
+        ImageGridAdapter(Context context, List<GridItem> listOfImages) {
             mContext = context;
             mListOfImages = listOfImages;
         }
@@ -427,10 +452,9 @@ public class StorageActivity extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.grid_item, null);
             ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_image);
-            Picasso.with(mContext).load(mListOfImages.get(position).value)
-                    .placeholder(R.drawable.firebase_icon)
-                    .error(R.drawable.firebase_icon)
-                    .into(imageView);
+            Glide.with(mContext).load(mListOfImages.get(position).value)
+                    .thumbnail(Glide.with(mContext).load(R.drawable.default_loader))
+                    .fitCenter().crossFade().into(imageView);
             return imageView;
 
         }

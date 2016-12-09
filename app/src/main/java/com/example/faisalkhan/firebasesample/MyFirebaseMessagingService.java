@@ -9,91 +9,102 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.example.faisalkhan.firebasesample.Notifications.FIREBASE_NOTIFICATION_INTENT_FILTER_NAME;
+import static com.example.faisalkhan.firebasesample.Notifications.NOTIFICATION_IMAGE;
+import static com.example.faisalkhan.firebasesample.Notifications.NOTIFICATION_MESSAGE;
+import static com.example.faisalkhan.firebasesample.Notifications.NOTIFICATION_TITLE;
+
 /**
- * MyFirebaseMessagingService
+ * Service Class for receiving notification from firebase.
  *
  * @author Faisal Khan
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
-    private NotificationCompat.Builder notificationBuilder;
-    private Bitmap image;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-        Log.d(TAG, "Notification Message Title: " + remoteMessage.getNotification().getTitle());
-        Log.d(TAG, "FCM Data: " + remoteMessage.getData());
 
-        String msg = remoteMessage.getNotification().getBody();
-        String title = remoteMessage.getNotification().getTitle();
-        Bitmap image = getBitmapFromURL(remoteMessage.getData().get("image"));
-        sendNotification(title,msg,image);
+        String msg="";
+        String title="";
+        String image=null;
+        if(remoteMessage!=null && remoteMessage.getNotification()!=null && remoteMessage.getNotification().getBody()!=null) {
+            msg = remoteMessage.getNotification().getBody();
+            Log.d(TAG,"Message in notification "+msg);
+        }
+
+        if(remoteMessage!=null && remoteMessage.getNotification()!=null && remoteMessage.getNotification().getTitle()!=null) {
+            title = remoteMessage.getNotification().getTitle();
+            Log.d(TAG,"Title in notification "+title);
+        }
+
+        if(remoteMessage!=null && remoteMessage.getData()!=null && remoteMessage.getData().containsKey("image")) {
+            image = remoteMessage.getData().get("image");
+            Log.d(TAG,"Image URl in notification "+image);
+        }
+
+        Intent intent = new Intent(FIREBASE_NOTIFICATION_INTENT_FILTER_NAME);
+        intent.putExtra(NOTIFICATION_TITLE, title);
+        intent.putExtra(NOTIFICATION_MESSAGE, msg);
+        if (image != null)
+            intent.putExtra(NOTIFICATION_IMAGE, image);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent); //send broadcast
+
+        sendNotification(title, msg, getBitmapFromURL(image));
     }
 
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param title title of notification
+     * @param messageBody messageBody of notification
+     * @param img image if available in notification
      */
     private void sendNotification(String title, String messageBody, Bitmap img) {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        if (img!=null) {
-            notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(title)
-                    .setContentText(messageBody)
-                    .setStyle(new NotificationCompat.BigPictureStyle()
-                            .bigPicture(img))
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setContentIntent(pendingIntent);
+        NotificationCompat.Builder notificationBuilder;
+        if (img != null) {
+            notificationBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title).setContentText(messageBody)
+                    .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(img))
+                    .setAutoCancel(true).setSound(defaultSoundUri).setContentIntent(pendingIntent);
         } else {
-            notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(title)
-                    .setContentText(messageBody)
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setContentIntent(pendingIntent);
+            notificationBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title).setContentText(messageBody).setAutoCancel(true)
+                    .setSound(defaultSoundUri).setContentIntent(pendingIntent);
         }
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
+    /**
+     * Method to fetch image from url
+     * @param src url
+     * @return bitmap
+     */
+    public Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
+            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch(IOException e) {
+            System.out.println(e);
             return null;
         }
     }

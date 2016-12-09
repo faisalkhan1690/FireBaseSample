@@ -34,25 +34,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Activity class for Demonstration of Database based on firebase.
- * <p>
+ * Activity class for Database based on firebase.
+ *
  * For performing any operation user should be authenticated from Firebase server.
  * Only then he can perform operations on Firebase Database.
  * For more details about the please Refer Authentication class in this project.
- * <p>
+ *
  * In this activity i am performing operations like Insertion, Deletion, update data and fetching data from firebase server.
- * For every operation there are separate methods in the code.
- * <p>
+ * For every operation there are separate methods in the code please refer those.
+ *
  * For performing any operation you have access to table in which you data is.
- * <p>
+ *
  * mRefDataBase = FirebaseDatabase.getInstance().getReference(TABLE_NAME);
- * Any by using this line you can access that table and can operation operations.
- * <p>
+ *
+ * And by using this line you can access that table and can operation operations.
+ *
  * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
  * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
- * <p>
- * For more info you can follow this link :- https://firebase.google.com/docs/database/
- * Or link :- http://firebasesample.blogspot.in/
+ *
+ * For more information about Firebase Database you can follow this link :- https://firebase.google.com/docs/database/
  * Or link :- https://firebase.google.com/docs/database/android/start/
  *
  * @author Faisal Khan
@@ -64,7 +64,6 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    @SuppressWarnings("all")
     private final String TABLE_NAME = "test_table";
 
     private final String KEY_ID = "id";
@@ -77,16 +76,19 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
     private EditText mEtCity;
     private EditText mEtCountry;
 
-    private TextView mTvAuthStatus;
     private ProgressDialog mProgressDialog;
+
     private ListView mLvData;
     private Button mBtnSave;
+    private View mLlButton;
     private View mBtnCancel;
+
+    private TextView mTvAuthStatus;
     private TextView mTvId;
     private TextView mTvName;
     private TextView mTvCity;
     private TextView mTvCountry;
-    private View mLlButton;
+
     private Operations mOperations = Operations.CANCEL;
     private ArrayList<UserData> mListData = new ArrayList<>();
 
@@ -489,7 +491,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
      * Adapter class for list that shows data
      */
     public class ListAdapter extends ArrayAdapter<UserData> {
-        public ListAdapter(Context context, int resource, List<UserData> objects) {
+        ListAdapter(Context context, int resource, List<UserData> objects) {
             super(context, resource, objects);
         }
 

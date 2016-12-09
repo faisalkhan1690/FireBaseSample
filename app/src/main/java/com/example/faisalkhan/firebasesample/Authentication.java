@@ -18,11 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * Activity class for Demonstration of Email base user Auth from firebase.
+ * Activity class for Email base user Auth from firebase.
  *
- * Firebase provide  Google+ ,Facebook ,Twitter etc based authentication. and with this it provides email based Authentication.
+ * Firebase provide Google+ ,Facebook ,Twitter etc based authentication and with this it provides email based Authentication too.
  *
- * For doing any operation you first need to FirebaseAuth instance and AuthStateListener instance. and after that set AuthStateListener
+ * For doing any operation you first need to create FirebaseAuth instance and AuthStateListener instance. And after that set AuthStateListener
  * listener to firebase instance.
  *
  * Now you can do Sign Up , login and Logout.
@@ -30,11 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
  * To know how you can configure Firebase follow link :- https://firebase.google.com/docs/android/setup
  * Or you can flow my doc as well link :- http://firebasesample.blogspot.in/
  *
- * Email based Authentication
- * Or you can also follow my link :- https://firebase.google.com/docs/auth/
- *
- * Or :- https://firebase.google.com/docs/auth/android/password-auth
- *
+ * For more details about Email based Authentication your can follow
+ * Link :- https://firebase.google.com/docs/auth/android/password-auth
  *
  * @author Faisal Khan
  */
@@ -92,6 +89,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
+
         //setting auth listener for Authentication object
         mAuth.addAuthStateListener(mAuthListener);
     }
@@ -100,6 +98,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
+
             //removing auth listener for Authentication object
             mAuth.removeAuthStateListener(mAuthListener);
         }
@@ -152,7 +151,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * Method to sign in with user id and pasword
+     * Method to sign in with user id and password
      * @param email  email of user
      * @param password passworrd of user
      */
@@ -192,7 +191,7 @@ public class Authentication extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * Method to check all validation is success
+     * Method to check all validation is success or not
      * @return true is validation true else false
      */
     private boolean validateForm() {
