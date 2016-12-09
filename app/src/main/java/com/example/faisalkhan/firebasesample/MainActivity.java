@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         listData.add("DataBase");
         listData.add("Storage");
         listData.add("Notifications");
+        listData.add("CrashAnalytics");
         ListView lvFireBase=(ListView)findViewById(R.id.lv_fire_base);
         lvFireBase.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData));
 
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 4:
                         startActivity(new Intent(MainActivity.this,Notifications.class));
+                        break;
+                    case 5:
+                        startActivity(new Intent(MainActivity.this,CrashAnalytics.class));
                         break;
                 }
             }

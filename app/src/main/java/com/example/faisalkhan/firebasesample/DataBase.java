@@ -112,7 +112,7 @@ public class DataBase extends AppCompatActivity implements View.OnClickListener 
             public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    mTvAuthStatus.setText("You are sign in Enjoy");
+                    mTvAuthStatus.setText("You are authenticated from server Enjoy");
                     mTvAuthStatus.setTextColor(Color.GREEN);
                     mTvAuthStatus.setOnClickListener(null);
                     Log.d(TAG, "User is sign in");
