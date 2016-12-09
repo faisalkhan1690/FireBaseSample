@@ -14,18 +14,18 @@ Using this you can know how to do these flowing things.
 
 Important links
 --------------
-Setup Firebase :-  https://firebase.google.com/docs/android/setup
-Firebase Analytics :- https://firebase.google.com/docs/analytics/android/start/
-Firebase Authntication :- https://firebase.google.com/docs/auth/android/password-auth
-Firebase Database :- https://firebase.google.com/docs/database/
-                  :- https://firebase.google.com/docs/database/android/start/
-Firebase Storage :- https://firebase.google.com/docs/storage/android/start
+- Setup Firebase :-  https://firebase.google.com/docs/android/setup
+- Firebase Analytics :- https://firebase.google.com/docs/analytics/android/start/
+- Firebase Authntication :- https://firebase.google.com/docs/auth/android/password-auth
+- Firebase Database :- https://firebase.google.com/docs/database/
+                  :- https://firebase.google.com/docs/database/android/start/                
+- Firebase Storage :- https://firebase.google.com/docs/storage/android/start
                  :- https://firebase.google.com/docs/storage/android/create-reference
                  :- https://firebase.google.com/docs/storage/android/upload-files
                  :- https://firebase.google.com/docs/storage/android/download-files
                  :- https://firebase.google.com/docs/storage/android/delete-files
-                 :- https://firebase.google.com/docs/storage/
-Firebase Push (FCM) :-  https://firebase.google.com/docs/notifications/
+                 :- https://firebase.google.com/docs/storage/               
+- Firebase Push (FCM) :-  https://firebase.google.com/docs/notifications/
 
 
 
